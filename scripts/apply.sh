@@ -30,6 +30,10 @@ cp "$DIR/config/cosmic-custom-shortcuts.ron" "$COSMIC_SHORTCUTS"
 echo "==> COSMIC: removing compose:rctrl (breaks Toshy's virtual Cmd key)"
 [ -f "$COSMIC_XKB" ] && sed -i -E 's/(,compose:rctrl|compose:rctrl,?)//; s/Some\(""\)/None/' "$COSMIC_XKB"
 
+echo "==> Claude Code: Alt+V image paste"
+mkdir -p "$HOME/.claude"
+[ -f "$HOME/.claude/keybindings.json" ] || cp "$DIR/config/claude-keybindings.json" "$HOME/.claude/keybindings.json"
+
 echo "==> Restarting Toshy services"
 "$HOME/.local/bin/toshy-services-restart" >/dev/null
 sleep 6

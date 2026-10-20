@@ -9,6 +9,7 @@ gaps Toshy doesn't cover.
 ```
 config/toshy-user-apps.py          Custom Toshy keymaps (goes in toshy_config.py "user_apps" slice)
 config/cosmic-custom-shortcuts.ron  COSMIC custom shortcuts (~/.config/cosmic/.../Shortcuts/v1/custom)
+config/claude-keybindings.json     Claude Code keybindings: Alt+V = image paste (~/.claude/keybindings.json)
 browser/mac-cmd-arrow-history.user.js  Violentmonkey userscript: Cmd+Left/Right = Back/Forward
 scripts/install.sh                 Fresh machine: clean Kinto/Toshy leftovers, install Toshy, run apply.sh (needs sudo)
 scripts/apply.sh                   Re-apply all customizations to an installed Toshy (no sudo, idempotent)
@@ -90,6 +91,16 @@ Keymaps in the `user_apps` slice are checked before Toshy's built-in ones, so th
 | ⌘C/V (⌃C still SIGINT), ⌘T/W/N, ⌘K/L | ✅ Toshy built-in |
 | ⌃Tab / ⌃⇧Tab, ⌘⇧[ ], ⌘⇧←/→ next/prev tab | ✅ **custom** (Toshy sent Ctrl+PageDown, which cosmic-term ignores) |
 | ⌘1…9 tab by position | ✅ **custom** (→ Ctrl+Shift+1…9) |
+| ⌃V paste clipboard image into Claude Code | ✅ **custom** (→ Alt+V, see below) |
+
+### Screenshot → Claude Code (⌃V)
+Same flow as macOS: ⌃⌘⇧4 (or ⌃⌘⇧3), pick **Copy to clipboard** in the COSMIC screenshot UI,
+then ⌃V in Claude Code.
+
+COSMIC Terminal binds Ctrl+V to text Paste (needed by Wispr Flow), so Claude Code never sees
+Ctrl+V. Instead Toshy turns physical Ctrl+V into Alt+V in COSMIC Terminal, and
+`config/claude-keybindings.json` (copy to `~/.claude/keybindings.json`) binds Alt+V to image paste.
+Claude Code reads the clipboard via `wl-paste` (package `wl-clipboard`). Text paste stays ⌘V.
 
 ## System changes made
 

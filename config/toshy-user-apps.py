@@ -27,6 +27,7 @@ if DESKTOP_ENV == 'cosmic':
         C("RC-7"):                  C("C-Shift-7"),
         C("RC-8"):                  C("C-Shift-8"),
         C("RC-9"):                  C("C-Shift-9"),
+        C("LC-v"):                  C("Alt-v"),                     # Ctrl+V: Claude Code image paste (Ctrl+V is bound to text Paste for Wispr)
     }, when = lambda ctx:
         cnfg.screen_has_focus and
         ctx_ovl_terminal_ergo and
