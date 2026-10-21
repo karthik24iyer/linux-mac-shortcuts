@@ -14,6 +14,7 @@ browser/mac-cmd-arrow-history.user.js  Violentmonkey userscript: Cmd+Left/Right 
 scripts/install.sh                 Fresh machine: clean Kinto/Toshy leftovers, install Toshy, run apply.sh (needs sudo)
 scripts/apply.sh                   Re-apply all customizations to an installed Toshy (no sudo, idempotent)
 scripts/keylog.py                  Show the keys Toshy actually emits (debugging)
+scripts/stuck-keys-monitor.py      Log keys held >15s on any keyboard (run by config/stuck-keys-monitor.service)
 ```
 
 ## Quick start
@@ -132,6 +133,15 @@ journalctl --user -u toshy-config -f
   run `toshy-services-restart`.
 - **Toshy upgrade** → re-run `~/src/toshy/setup_toshy.py install`, then `./scripts/apply.sh`.
   The `user_apps` slice survives upgrades, but `apply.sh` is safe either way.
+- **Keyboard half-dead (many keys do nothing) until reboot** → Wispr Flow's helper bug. Right after
+  pasting (`LEFTCTRL+V`) it sometimes presses `RIGHTCTRL` on its own virtual keyboard and never
+  releases it, apparently "restoring" Toshy's Cmd key (Right Ctrl) when Cmd was in use around the
+  paste (e.g. Cmd+Tab). libinput only releases a key when *every* device holding it releases, so no
+  physical key can clear it; removing the helper's device does. **Auto-fixed** by the
+  `stuck-keys-monitor` service (`config/stuck-keys-monitor.service` → `~/.config/systemd/user/`):
+  a key held >2s on the helper's device kills the helper, and Wispr respawns it instantly.
+  It also logs any key held >15s on other keyboards: `journalctl --user -u stuck-keys-monitor`.
+  Manual recovery: Toshy tray → **Re/Start Toshy Services** (watch-toshy then restarts Wispr).
 - **Toshy installer without sudo**: if system prep is already done (packages, `input` group,
   udev rule, uinput), answer `n` to the admin question and type the secret code it prints
   to do a user-only install.

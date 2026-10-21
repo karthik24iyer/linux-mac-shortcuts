@@ -1,0 +1,10 @@
+[Unit]
+Description=Log keys stuck down on any keyboard
+
+[Service]
+ExecStart=%h/Documents/Projects/linux-mac-shortcuts/scripts/stuck-keys-monitor.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
